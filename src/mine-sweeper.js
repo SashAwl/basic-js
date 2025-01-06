@@ -23,10 +23,99 @@ const { NotImplementedError } = require('../extensions/index.js');
  *  [1, 1, 1]
  * ]
  */
-function minesweeper(/* matrix */) {
-  throw new NotImplementedError('Not implemented');
-  // remove line with error and write your code here
+function minesweeper(matrix) {
+  const height = matrix.length;
+  const width = matrix[0].length;
+  const result = [];
+
+  for (let i = 0; i < height; i++) {
+    for (let j = 0; j < width; j++) {
+      matrix[i][j] = matrix[i][j] ? 1 : 0;
+    }
+  }
+
+  console.log(matrix)
+
+  for (let i = 0; i < height; i++) {
+    let row = [];
+
+    for (let j = 0; j < width; j++) {
+      let currentCount = 0;
+
+      if (matrix[i][j] === 1) {
+        currentCount = 1;
+      }
+      
+      if (matrix[i][j] !== 1 && i === 0 && j > 0 && j < width-1) {
+        currentCount = 
+          matrix[i][j-1] + matrix[i][j+1] + 
+          matrix[i+1][j-1] + matrix[i+1][j] + matrix[i+1][j+1];
+      }
+
+      if (matrix[i][j] !== 1 && i === height-1 && j > 0 && j < width-1) {
+        currentCount = 
+          matrix[i-1][j-1] + matrix[i-1][j] + matrix[i-1][j+1] + 
+          matrix[i][j-1] + matrix[i][j+1];
+      }
+
+      if (matrix[i][j] !== 1 && j === 0 && i > 0 && i < height-1) {
+        currentCount = 
+        matrix[i-1][j] + matrix[i-1][j+1] + 
+        matrix[i][j+1] + 
+        matrix[i+1][j] + matrix[i+1][j+1];
+      }
+
+      if (matrix[i][j] !== 1 && j === width-1 && i > 0 && i < height-1) {
+        currentCount = 
+          matrix[i-1][j-1] + matrix[i-1][j] + 
+          matrix[i][j-1] +
+          matrix[i+1][j-1] + matrix[i+1][j];
+      }
+
+      if (matrix[i][j] !== 1 && i === 0 && j === 0) {
+        currentCount =  
+          matrix[i][j+1] + 
+          matrix[i+1][j] + matrix[i+1][j+1];
+      }
+
+      if (matrix[i][j] !== 1 && i === 0 && j === width-1) {
+        currentCount = 
+          matrix[i][j-1] + 
+          matrix[i+1][j-1] + matrix[i+1][j];
+      }
+
+      if (matrix[i][j] !== 1 && i === height-1 && j === 0) {
+        currentCount = 
+          matrix[i-1][j] + matrix[i-1][j+1] + 
+           matrix[i][j+1];
+      }
+
+      if (matrix[i][j] !== 1 && i === height-1 && j === width-1) {
+        currentCount = 
+          matrix[i-1][j-1] + matrix[i-1][j] + 
+          matrix[i][j-1];
+      }
+
+      if (matrix[i][j] !== 1 && i !== 0 && j !== 0 && i !== height-1 && j !== width-1) {
+        currentCount = 
+          matrix[i-1][j-1] + matrix[i-1][j] + matrix[i-1][j+1] + 
+          matrix[i][j-1] + matrix[i][j+1] + 
+          matrix[i+1][j-1] + matrix[i+1][j] + matrix[i+1][j+1]
+      }
+
+      row.push(currentCount);
+    }
+    result.push(row);
+  }
+
+  return result;
 }
+
+// console.log(minesweeper([
+//   [true, false, false],
+//   [false, true, false],
+//   [false, false, false],
+// ]))
 
 module.exports = {
   minesweeper
